@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Move Red and Green Dots with Gamepad Sticks</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    .dot {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        border-radius: 50%;
+    }
+    #red-dot {
+        background-color: red;
+    }
+    #green-dot {
+        background-color: green;
+    }
+</style>
+</head>
+<body>
+<div id="red-dot" class="dot"></div>
+<div id="green-dot" class="dot"></div>
+
+<script>
+    // Get references to the dot elements
+    var redDot = document.getElementById('red-dot');
+    var greenDot = document.getElementById('green-dot');
+
+    // Initial positions
+    var redDotPosX = 0;
+    var redDotPosY = 0;
+    var greenDotPosX = 0;
+    var greenDotPosY = 0;
+
+    // Function to update dot positions
+    function updateDotPositions() {
+        redDot.style.left = redDotPosX + 'px';
+        redDot.style.top = redDotPosY + 'px';
+        greenDot.style.left = greenDotPosX + 'px';
+        greenDot.style.top = greenDotPosY + 'px';
+    }
+
+    // Function to handle gamepad input
+    function handleGamepadInput() {
+        // Get connected gamepads
+        var gamepads = navigator.getGamepads();
+        
+        // Iterate over connected gamepads
+        for (var i = 0; i < gamepads.length; i++) {
+            var gamepad = gamepads[i];
+            // Check if gamepad exists and has axes
+            if (gamepad && gamepad.axes.length >= 2) {
+                // Adjust positions based on the Y-axis of the left stick
+                if (i === 0) { // Red dot
+                    redDotPosY += gamepad.axes[1] * 10;
+                    redDotPosX += gamepad.axes[0] * 10;
+                    // Ensure red dot stays within the boundaries
+                    redDotPosX = Math.max(0, Math.min(window.innerWidth - 20, redDotPosX));
+                    redDotPosY = Math.max(0, Math.min(window.innerHeight - 20, redDotPosY));
+                } else if (i === 1) { // Green dot
+                    greenDotPosY += gamepad.axes[1] * 10;
+                    greenDotPosX += gamepad.axes[0] * 10;
+                    // Ensure green dot stays within the boundaries
+                    greenDotPosX = Math.max(0, Math.min(window.innerWidth - 20, greenDotPosX));
+                    greenDotPosY = Math.max(0, Math.min(window.innerHeight - 20, greenDotPosY));
+                }
+            }
+        }
+        // Update dot positions
+        updateDotPositions();
+    }
+
+    // Function to continuously check gamepad input
+    function checkGamepadInput() {
+        // Request animation frame for continuous checking
+        requestAnimationFrame(checkGamepadInput);
+        // Handle gamepad input
+        handleGamepadInput();
+    }
+
+    // Start checking gamepad input
+    checkGamepadInput();
+</script>
+</body>
+</html>
