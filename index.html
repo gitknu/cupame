@@ -33,10 +33,10 @@
     var greenDot = document.getElementById('green-dot');
 
     // Initial positions
-    var redDotPosX = 0;
-    var redDotPosY = 0;
-    var greenDotPosX = 0;
-    var greenDotPosY = 0;
+    var redDotPosX = window.innerWidth * 0.25; // 25% from left border
+    var redDotPosY = window.innerHeight * 0.5; // 50% vertically
+    var greenDotPosX = window.innerWidth * 0.75; // 25% from right border
+    var greenDotPosY = window.innerHeight * 0.5; // 50% vertically
 
     // Function to update dot positions
     function updateDotPositions() {
